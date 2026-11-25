@@ -1,0 +1,32 @@
+
+/* Reset default browser spacing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Common page settings */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #eef2f8;
+}
+
+/* Form elements inherit the page font */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove default link decoration */
+a {
+  text-decoration: none;
+}
