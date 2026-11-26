@@ -17,14 +17,14 @@ function Login() {
 
     try {
       const response = await axios.post(
-  'http://localhost:3000/login',
-  { email, password },
-  { withCredentials: true }
-)
+        '/api/login',
+        { email, password },
+        { withCredentials: true }
+      )
 
-if (response.data.message === 'Login successful!') {
-  navigate('/dashboard')
-}
+      if (response.data.message === 'Login successful!') {
+        navigate('/dashboard')
+      }
 
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed!')
@@ -34,6 +34,7 @@ if (response.data.message === 'Login successful!') {
   return (
     <div className="login-page">
       <div className="login-card">
+
         <div className="login-left">
           <h1>AuthFlow</h1>
           <h2>Welcome Back!</h2>
@@ -58,6 +59,7 @@ if (response.data.message === 'Login successful!') {
 
             <div className="form-group">
               <label>Password</label>
+
               <div className="password-input">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -66,6 +68,7 @@ if (response.data.message === 'Login successful!') {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -86,6 +89,7 @@ if (response.data.message === 'Login successful!') {
             Don't have an account? <Link to="/register">Create account</Link>
           </p>
         </div>
+
       </div>
     </div>
   )

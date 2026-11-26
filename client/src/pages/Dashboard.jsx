@@ -10,7 +10,7 @@ function Dashboard() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/me', {
+    axios.get('/api/me', {
       withCredentials: true
     })
       .then(response => {
@@ -27,7 +27,7 @@ function Dashboard() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        'http://localhost:3000/logout',
+        '/api/logout',
         {},
         { withCredentials: true }
       )
@@ -38,18 +38,12 @@ function Dashboard() {
     }
   }
 
-  if (loading) {
-    return <h2>Loading dashboard...</h2>
-  }
-
-  if (!user) {
-    return null
-  }
+  if (loading) return <h2>Loading dashboard...</h2>
+  if (!user) return null
 
   return (
     <div className="dashboard-page">
 
-      {/* SIDEBAR */}
       <aside className="dashboard-sidebar">
         <h2>AuthFlow</h2>
 
@@ -68,7 +62,6 @@ function Dashboard() {
         </button>
       </aside>
 
-      {/* MAIN DASHBOARD */}
       <main className="dashboard-main">
 
         <header className="dashboard-top">
@@ -82,27 +75,19 @@ function Dashboard() {
           </div>
         </header>
 
-        {/* WELCOME SECTION */}
         <section className="dashboard-welcome">
           <p>YOUR PERSONAL SPACE</p>
-
           <h1>Hello, {user.name}!</h1>
-
           <span>
             Great to have you back. You're successfully logged in.
           </span>
         </section>
 
-        {/* DASHBOARD CARDS */}
         <section className="dashboard-grid">
 
           <div className="dashboard-card">
             <h3>My Profile</h3>
-
-            <p className="profile-name">
-              {user.name}
-            </p>
-
+            <p className="profile-name">{user.name}</p>
             <p>{user.email}</p>
 
             <Link to="/profile" className="profile-view-link">
@@ -112,11 +97,7 @@ function Dashboard() {
 
           <div className="dashboard-card">
             <h3>Account Status</h3>
-
-            <p className="status-active">
-              ● Active
-            </p>
-
+            <p className="status-active">● Active</p>
             <p>Your account is secure and active.</p>
           </div>
 

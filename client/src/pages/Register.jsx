@@ -1,149 +1,123 @@
-import axios from 'axios'
+
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import '../App.css'
 
 function Register() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
 
+  const handleRegister = async (event) => {
+    event.preventDefault()
+    setError('')
 
-const handleRegister = async (event) => {
-  event.preventDefault()
+    if (password !== confirmPassword) {
+      setError('Passwords do not match!')
+      return
+    }
 
-  if (password !== confirmPassword) {
-    alert('Passwords do not match!')
-    return
+    try {
+      const response = await axios.post(
+        '/api/register',
+        {
+          name,
+          email,
+          password,
+          confirmPassword
+        },
+        { withCredentials: true }
+      )
+
+      alert(response.data.message || 'Registration successful!')
+      navigate('/')
+
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed!')
+    }
   }
-
-  try {
-    const response = await axios.post(
-      'http://localhost:3000/register',
-      {
-        name,
-        email,
-        password,
-        confirmPassword
-      },
-      { withCredentials: true }
-    )
-
-    alert(response.data.message || 'Registration successful!')
-
-  } catch (error) {
-    alert(error.response?.data?.message || 'Registration failed!')
-  }
-}
-
 
   return (
     <div className="login-page">
       <div className="login-card">
 
         <div className="login-left">
+          <h1>AuthFlow</h1>
+          <h2>Create Your Account</h2>
+          <p>Join AuthFlow and get started.</p>
+        </div>
 
-          <div className="brand">
-            <div className="brand-icon">A</div>
-            <span>AuthFlow</span>
-          </div>
-
-          <div className="welcome-text">
-            <p className="eyebrow">CREATE ACCOUNT</p>
-            <h1>Get started today</h1>
-            <p className="subtitle">
-              Create your account to access your personal space.
-            </p>
-          </div>
+        <div className="login-right">
+          <h2>Sign Up</h2>
+          <p>Enter your details to create an account.</p>
 
           <form onSubmit={handleRegister}>
-
             <div className="form-group">
-              <label htmlFor="name">Full name</label>
+              <label>Full Name</label>
               <input
-                id="name"
                 type="text"
-                placeholder="Your full name"
+                placeholder="Enter your name"
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="register-email">Email address</label>
+              <label>Email Address</label>
               <input
-                id="register-email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="Enter your email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="register-password">Password</label>
-              <input
-                id="register-password"
-                type="password"
-                placeholder="Create a password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-              />
+              <label>Password</label>
+              <div className="password-input">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirm-password">Confirm password</label>
+              <label>Confirm Password</label>
               <input
-                id="confirm-password"
                 type="password"
-                placeholder="Re-enter your password"
+                placeholder="Confirm your password"
                 value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
+
+            {error && <p className="error-message">{error}</p>}
 
             <button type="submit" className="login-button">
               Create Account
             </button>
-
           </form>
 
-          <p className="signup-text">
-            Already have an account?
-            <a href="/"> Sign in</a>
-          </p>
-
-        </div>
-
-        <div className="login-right">
-          <div className="right-content">
-            <div className="illustration-icon">✦</div>
-
-            <h2>Start your<br />journey here.</h2>
-
-            <p>
-              Create your account and enjoy a simple,
-              secure and personalised experience.
-            </p>
-
-            <div className="feature">
-              <span>✓</span> Quick account creation
-            </div>
-
-            <div className="feature">
-              <span>✓</span> Secure password storage
-            </div>
-
-            <div className="feature">
-              <span>✓</span> Your own personal dashboard
-            </div>
-          </div>
-
-          <p className="right-footer">
-            AUTHFLOW · YOUR DIGITAL SPACE
+          <p className="register-link">
+            Already have an account? <Link to="/">Sign In</Link>
           </p>
         </div>
 

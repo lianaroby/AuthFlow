@@ -29,7 +29,7 @@ app.use(session({
 }));
 
 // 4. REGISTRATION ROUTE
-app.post('/register', async (req, res) => {
+app.post(['/register', '/api/register'], async (req, res) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
 
@@ -78,7 +78,7 @@ app.post('/register', async (req, res) => {
 });
 
 // 5. LOGIN ROUTE
-app.post('/login', async (req, res) => {
+app.post(['/login', '/api/login'], async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -182,7 +182,7 @@ app.get('/api/me', async (req, res) => {
 });
 
 // 7. LOGOUT ROUTE
-app.post('/logout', (req, res) => {
+app.post(['/logout', '/api/logout'], (req, res) => {
     req.session.destroy((error) => {
         if (error) {
             return res.status(500).json({
@@ -199,6 +199,6 @@ app.post('/logout', (req, res) => {
 });
 
 // 8. START SERVER
-app.listen(3000, () => {
+app.listen(3000, '0.0.0.0', () => {
     console.log('Server is running on port 3000');
 });
