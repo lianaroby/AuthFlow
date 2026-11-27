@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import '../App.css'
 
+const API = 'https://authflow-xse2.onrender.com'
+
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -17,7 +19,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        'https://authflow-xse2.onrender.com/api/login',
+        `${API}/api/login`,
         { email, password },
         { withCredentials: true }
       )
@@ -25,7 +27,6 @@ function Login() {
       if (response.data.message === 'Login successful!') {
         navigate('/dashboard')
       }
-
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed!')
     }
@@ -34,7 +35,6 @@ function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-
         <div className="login-left">
           <h1>AuthFlow</h1>
           <h2>Welcome Back!</h2>
@@ -59,7 +59,6 @@ function Login() {
 
             <div className="form-group">
               <label>Password</label>
-
               <div className="password-input">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -89,7 +88,6 @@ function Login() {
             Don't have an account? <Link to="/register">Create account</Link>
           </p>
         </div>
-
       </div>
     </div>
   )
