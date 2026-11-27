@@ -1,34 +1,35 @@
 
-// 1. IMPORT PACKAGES
 const cors = require('cors');
 const express = require('express');
 const pool = require('./database');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 
-// 2. CREATE EXPRESS APPLICATION
 const app = express();
 
-// 3. MIDDLEWARE
+app.set('trust proxy', 1);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://authflow-3l9g.netlify.app',
     credentials: true
 }));
 
 app.use(session({
-    secret: 'my_login_secret_key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
+        secure: true,
+        sameSite: 'none',
         maxAge: 1000 * 60 * 30
     }
 }));
 
-// 4. REGISTRATION ROUTE
+// REGISTRATION
 app.post(['/register', '/api/register'], async (req, res) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
@@ -77,7 +78,7 @@ app.post(['/register', '/api/register'], async (req, res) => {
     }
 });
 
-// 5. LOGIN ROUTE
+// LOGIN
 app.post(['/login', '/api/login'], async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -148,7 +149,7 @@ app.post(['/login', '/api/login'], async (req, res) => {
     }
 });
 
-// 6. GET LOGGED-IN USER DETAILS
+// LOGGED-IN USER
 app.get('/api/me', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).json({
@@ -168,9 +169,7 @@ app.get('/api/me', async (req, res) => {
             });
         }
 
-        res.json({
-            user: result.rows[0]
-        });
+        res.json({ user: result.rows[0] });
 
     } catch (error) {
         console.log(error.message);
@@ -181,7 +180,7 @@ app.get('/api/me', async (req, res) => {
     }
 });
 
-// 7. LOGOUT ROUTE
+// LOGOUT
 app.post(['/logout', '/api/logout'], (req, res) => {
     req.session.destroy((error) => {
         if (error) {
@@ -190,7 +189,11 @@ app.post(['/logout', '/api/logout'], (req, res) => {
             });
         }
 
-        res.clearCookie('connect.sid');
+        res.clearCookie('connect.sid', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none'
+        });
 
         res.json({
             message: 'Logged out successfully!'
@@ -198,7 +201,9 @@ app.post(['/logout', '/api/logout'], (req, res) => {
     });
 });
 
-// 8. START SERVER
-app.listen(3000, '0.0.0.0', () => {
-    console.log('Server is running on port 3000');
+// START SERVER
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on port ${PORT}`);
 });
