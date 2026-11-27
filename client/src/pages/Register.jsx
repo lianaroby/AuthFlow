@@ -24,7 +24,7 @@ function Register() {
 
     try {
       const response = await axios.post(
-        '/api/register',
+        'https://authflow-xse2.onrender.com/api/register',
         {
           name,
           email,
@@ -45,7 +45,6 @@ function Register() {
   return (
     <div className="login-page">
       <div className="login-card">
-
         <div className="login-left">
           <h1>AuthFlow</h1>
           <h2>Create Your Account</h2>
@@ -120,7 +119,6 @@ function Register() {
             Already have an account? <Link to="/">Sign In</Link>
           </p>
         </div>
-
       </div>
     </div>
   )
