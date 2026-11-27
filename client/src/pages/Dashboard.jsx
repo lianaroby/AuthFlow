@@ -4,13 +4,15 @@ import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import '../App.css'
 
+const API = 'https://authflow-xse2.onrender.com'
+
 function Dashboard() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios.get('/api/me', {
+    axios.get(`${API}/api/me`, {
       withCredentials: true
     })
       .then(response => {
@@ -27,7 +29,7 @@ function Dashboard() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        '/api/logout',
+        `${API}/api/logout`,
         {},
         { withCredentials: true }
       )
@@ -43,10 +45,8 @@ function Dashboard() {
 
   return (
     <div className="dashboard-page">
-
       <aside className="dashboard-sidebar">
         <h2>AuthFlow</h2>
-
         <p className="sidebar-label">MENU</p>
 
         <Link to="/dashboard" className="sidebar-active">
@@ -63,7 +63,6 @@ function Dashboard() {
       </aside>
 
       <main className="dashboard-main">
-
         <header className="dashboard-top">
           <div>
             <h2>Dashboard</h2>
@@ -84,7 +83,6 @@ function Dashboard() {
         </section>
 
         <section className="dashboard-grid">
-
           <div className="dashboard-card">
             <h3>My Profile</h3>
             <p className="profile-name">{user.name}</p>
@@ -100,13 +98,11 @@ function Dashboard() {
             <p className="status-active">● Active</p>
             <p>Your account is secure and active.</p>
           </div>
-
         </section>
 
         <footer className="dashboard-footer">
           AuthFlow © 2026 | Secure Authentication System
         </footer>
-
       </main>
     </div>
   )
