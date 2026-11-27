@@ -17,7 +17,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        '/api/login',
+        'https://authflow-xse2.onrender.com/api/login',
         { email, password },
         { withCredentials: true }
       )
